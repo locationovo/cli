@@ -25,11 +25,11 @@ var (
 )
 
 func init() {
-	if runtime.GOOS == "darwin" {
-		if _, err := os.Stat("/var/mobile"); err == nil && os.Getenv("GH_CONFIG_DIR") == "" {
+	if runtime.GOOS == "ios" {
+		if os.Getenv("GH_CONFIG_DIR") == "" {
 			os.Setenv("GH_CONFIG_DIR", "/var/mobile/.config/gh")
-			isIOS = true
 		}
+		isIOS = true
 	}
 
 	if !isIOS {
@@ -43,7 +43,6 @@ func init() {
 
 	os.MkdirAll(configDir, 0700)
 
-	// 非阻塞文件锁 
 	var err error
 	lockFile, err = os.OpenFile(lockPath, os.O_CREATE|os.O_RDWR, 0600)
 	if err == nil {
@@ -62,18 +61,14 @@ func handleHostsFile() {
 
 	switch {
 	case plainExists && !encExists:
-		// 首次有明文无加密，旧版升级加密迁移
 		encryptFile()
 		os.Remove(plainPath)
 	case encExists && plainExists:
-		// kill -9残留 加密文件是权威，删明文重解密
 		os.Remove(plainPath)
 		decryptFile()
 	case encExists && !plainExists:
-		// 正常解密
 		decryptFile()
 	case !encExists && !plainExists:
-		// 首次使用，静默跳过
 	}
 }
 

@@ -1,6 +1,7 @@
 CGO_ENABLED ?= 1
 GOOS        ?= ios
 GOARCH      ?= arm64
+GOMINIOS    ?= 14.0
 TARGET      ?= gh
 SIGN_TOOL   ?= ldid
 BUILD_DIR   ?= ./cmd/gh

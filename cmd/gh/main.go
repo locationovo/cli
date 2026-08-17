@@ -1,3 +1,4 @@
+// by ds v4 pro
 package main
 
 import (
@@ -42,7 +43,7 @@ func init() {
 
 	os.MkdirAll(configDir, 0700)
 
-	// 文件锁：非阻塞，抢不到说明其他实例已解密，直接用明文
+	// 非阻塞文件锁 
 	var err error
 	lockFile, err = os.OpenFile(lockPath, os.O_CREATE|os.O_RDWR, 0600)
 	if err == nil {
@@ -61,18 +62,18 @@ func handleHostsFile() {
 
 	switch {
 	case plainExists && !encExists:
-		// 问题1：首次有明文无加密 → 旧版升级，加密迁移
+		// 首次有明文无加密，旧版升级加密迁移
 		encryptFile()
 		os.Remove(plainPath)
 	case encExists && plainExists:
-		// 问题2：kill -9 残留 → 加密文件是权威，删明文重解密
+		// kill -9残留 加密文件是权威，删明文重解密
 		os.Remove(plainPath)
 		decryptFile()
 	case encExists && !plainExists:
-		// 正常：解密
+		// 正常解密
 		decryptFile()
 	case !encExists && !plainExists:
-		// 问题3：首次使用，无任何文件 → 静默跳过
+		// 首次使用，静默跳过
 	}
 }
 

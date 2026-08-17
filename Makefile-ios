@@ -1,0 +1,20 @@
+CGO_ENABLED ?= 0
+GOOS        ?= ios
+GOARCH      ?= arm64
+TARGET      ?= gh
+SIGN_TOOL   ?= ldid
+
+.PHONY: all
+all: deps $(TARGET)
+
+.PHONY: deps
+deps:
+	go mod tidy
+
+$(TARGET):
+	CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $@ .
+	$(SIGN_TOOL) -S $@
+
+.PHONY: clean
+clean:
+	rm -f $(TARGET)

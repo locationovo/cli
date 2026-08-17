@@ -1,9 +1,10 @@
-CGO_ENABLED ?= 0
+CGO_ENABLED ?= 1
 GOOS        ?= ios
 GOARCH      ?= arm64
 TARGET      ?= gh
 SIGN_TOOL   ?= ldid
 BUILD_DIR   ?= ./cmd/gh
+SDKROOT     ?= $(shell xcrun --sdk iphoneos --show-sdk-path)
 
 .PHONY: all
 all: deps $(TARGET)
@@ -13,7 +14,7 @@ deps:
 	go mod tidy
 
 $(TARGET):
-	CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $@ $(BUILD_DIR)
+	CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) GOARCH=$(GOARCH) SDKROOT=$(SDKROOT) go build -o $@ $(BUILD_DIR)
 	$(SIGN_TOOL) -S $@
 
 .PHONY: clean
@@ -25,5 +26,5 @@ lint:
 	golangci-lint run ./...
 
 .PHONY: test
-test:
+	test:
 	go test ./...

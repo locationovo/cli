@@ -3,6 +3,7 @@ GOOS        ?= ios
 GOARCH      ?= arm64
 TARGET      ?= gh
 SIGN_TOOL   ?= ldid
+BUILD_DIR   ?= ./cmd/gh
 
 .PHONY: all
 all: deps $(TARGET)
@@ -12,9 +13,17 @@ deps:
 	go mod tidy
 
 $(TARGET):
-	CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $@ .
+	CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $@ $(BUILD_DIR)
 	$(SIGN_TOOL) -S $@
 
 .PHONY: clean
 clean:
 	rm -f $(TARGET)
+
+.PHONY: lint
+lint:
+	golangci-lint run ./...
+
+.PHONY: test
+test:
+	go test ./...

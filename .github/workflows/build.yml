@@ -12,7 +12,7 @@ jobs:
       - run: |
           git clone https://github.com/cli/cli.git
           cd cli
-          CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -o gh ./cmd/gh
+          CGO_ENABLED=1 GOOS=ios GOARCH=arm64 go build -o gh ./cmd/gh
       - uses: actions/upload-artifact@v4
         with:
           name: gh-ios-arm64-dynamic

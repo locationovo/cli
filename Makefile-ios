@@ -13,6 +13,7 @@ all: deps $(TARGET)
 .PHONY: deps
 deps:
 	go mod tidy
+	go mod vendor
 
 $(TARGET):
 	CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) GOARCH=$(GOARCH) SDKROOT=$(SDKROOT) go build -o $@ $(BUILD_DIR)

@@ -191,4 +191,4 @@ require (
 	gotest.tools/v3 v3.5.2 // indirect
 	k8s.io/klog/v2 v2.140.0 // indirect
 )
-replace github.com/AlecAivazis/survey/v2 => github.com/locationovo/survey/v2 v1.0.0
+replace github.com/AlecAivazis/survey/v2 => github.com/locationovo/survey/v2 v2.0.0
